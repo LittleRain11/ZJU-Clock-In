@@ -10,7 +10,7 @@ import re
 import datetime
 import time
 import sys
-import ddddocr
+# import ddddocr
 
 
 class ClockIn(object):
@@ -36,10 +36,10 @@ class ClockIn(object):
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        # self.eai_sess = eai_sess
         self.sess = requests.Session()
-#         self.ocr = ddddocr.DdddOcr()
-        self.ocr = ddddocr.DdddOcr(show_ad=False)
+        # self.eai_sess = eai_sess
+        # self.ocr = ddddocr.DdddOcr()
+        # self.ocr = ddddocr.DdddOcr(show_ad=False)
 
     def login(self):
         """Login to ZJU platform"""
@@ -124,7 +124,10 @@ class ClockIn(object):
         new_info['jcqzrq'] = ""
         new_info['gwszdd'] = ""
         new_info['szgjcs'] = ""
-        new_info['verifyCode'] = self.get_captcha()
+
+        # 2022.07.08 取消了验证码，添加internship字段
+        # new_info['verifyCode'] = self.get_captcha()   # 不再需要验证码
+        new_info['internship'] = 2  # 今日是否进行实习或实践：1-校内实习，2-校外实习，3-否
 
         # 2021.08.05 Fix 2
         magics = re.findall(r'"([0-9a-f]{32})":\s*"([^\"]+)"', html)
@@ -203,12 +206,11 @@ def main(username, password):
         print('数据提交失败')
         raise Exception
 
-        
+
 
 
 if __name__ == "__main__":
     username = sys.argv[1]
     password = sys.argv[2]
-    
-    main(username, password)
 
+    main(username, password)
